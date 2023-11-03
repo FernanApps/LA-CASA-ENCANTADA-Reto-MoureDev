@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -246,6 +247,15 @@ fun Rooms(modifier: Modifier) {
                                 .aspectRatio(1f)
                                 .padding(2.dp),
                             currentCardFace = currentCardFace
+                            , back = {
+                                Image(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(10.dp),
+                                    painter = painterResource(id = R.drawable.ic_ghost),
+                                    contentDescription = "icon_ghost",
+                                )
+                            }
                         )
 
 
@@ -358,7 +368,14 @@ fun FlipCard(
 }
 
 @Composable
-fun FlipCardImp(modifier: Modifier, currentCardFace: CardFace) {
+fun FlipCardImp(
+    modifier: Modifier,
+    currentCardFace: CardFace,
+    front: (@Composable () -> Unit)? = null,
+    back: (@Composable () -> Unit)? = null
+
+
+) {
     //var currentCardFace by remember { mutableStateOf(CardFace.Front) }
 
     FlipCard(
@@ -367,7 +384,7 @@ fun FlipCardImp(modifier: Modifier, currentCardFace: CardFace) {
             //currentCardFace = it.next
         },
         modifier = modifier,
-        front = {
+        front = front ?: {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -377,7 +394,7 @@ fun FlipCardImp(modifier: Modifier, currentCardFace: CardFace) {
                 Text(text = "Frente", color = Color.White)
             }
         },
-        back = {
+        back = back ?: {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
